@@ -1,43 +1,66 @@
 package com.example.camerademo
 
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.camerademo.ui.theme.CameraDemoTheme
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentActivity
+import com.example.camerademo.databinding.ActivityMainBinding
+import com.permissionx.guolindev.PermissionX
+import dagger.hilt.android.AndroidEntryPoint
 
-class MainActivity : ComponentActivity() {
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            CameraDemoTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
-            }
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.mainComposeView.setContent {
+            
         }
+        askPermission(this)
+
+
     }
 }
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    CameraDemoTheme {
-        Greeting("Android")
+fun askPermission(activity: FragmentActivity) {
+    val requestList = mutableListOf<String>()
+    if (ContextCompat.checkSelfPermission(
+        activity,
+        android.Manifest.permission.CAMERA
+    ) != PackageManager.PERMISSION_GRANTED) {
+        requestList.add(android.Manifest.permission.CAMERA)
+    }
+    if (requestList.isNotEmpty()) {
+        PermissionX.init(activity)
+            .permissions(requestList)
+            .explainReasonBeforeRequest()
+            .onExplainRequestReason { scope, deniedList ->
+                val message = "The Application needs permissions below to run"
+                scope.showRequestReasonDialog(deniedList, message, "Allow", "Deny")
+            }
+            .onForwardToSettings { scope, deniedList ->
+                scope.showForwardToSettingsDialog(
+                    deniedList,
+                    "You need to allow necessary permissions in Settings manually",
+                    "OK",
+                    "Cancel"
+                )
+            }
+            .request { allGranted, grantedList, deniedList ->
+                if (allGranted) {
+                    Toast.makeText(activity, "All permisssions are allowed", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    Toast.makeText(activity, "You have denied：$deniedList", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
     }
 }
