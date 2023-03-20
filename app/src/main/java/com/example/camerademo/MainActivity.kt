@@ -3,11 +3,19 @@ package com.example.camerademo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
+import com.example.camerademo.cameraX.startCamera
 import com.example.camerademo.databinding.ActivityMainBinding
 import com.permissionx.guolindev.PermissionX
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,10 +29,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.mainComposeView.setContent {
-            
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+            ) {
+                Button(onClick = {
+                    startCamera(this@MainActivity, binding.mainPreview)
+                }, modifier = Modifier.align(Alignment.Center)) {
+                    Text(text = "cameraX预览")
+                }
+            }
         }
         askPermission(this)
-
 
     }
 }
@@ -32,9 +49,10 @@ class MainActivity : AppCompatActivity() {
 fun askPermission(activity: FragmentActivity) {
     val requestList = mutableListOf<String>()
     if (ContextCompat.checkSelfPermission(
-        activity,
-        android.Manifest.permission.CAMERA
-    ) != PackageManager.PERMISSION_GRANTED) {
+            activity,
+            android.Manifest.permission.CAMERA
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
         requestList.add(android.Manifest.permission.CAMERA)
     }
     if (requestList.isNotEmpty()) {
