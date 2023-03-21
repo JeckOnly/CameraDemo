@@ -2,6 +2,7 @@ package com.example.camerademo.camera2
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
@@ -14,9 +15,7 @@ import android.os.HandlerThread
 import android.view.Surface
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.databinding.DataBindingUtil
 import com.example.camerademo.R
+import com.example.camerademo.camera1.Camera1Activity
 import com.example.camerademo.databinding.ActivityCamera2Binding
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -113,10 +113,18 @@ class Camera2Activity : AppCompatActivity() {
                 .fillMaxWidth()
                 .height(60.dp)
         ) {
-            Button(onClick = {
-                turnOnCameraPreview()
-            }, modifier = Modifier.align(Alignment.Center)) {
-                Text(text = "camera2预览")
+            Row(Modifier.align(Alignment.Center)) {
+                Button(onClick = {
+                    turnOnCameraPreview()
+                }) {
+                    Text(text = "camera2预览")
+                }
+                Spacer(modifier = Modifier.width(20.dp))
+                Button(onClick = {
+                    startActivity(Intent(this@Camera2Activity, Camera1Activity::class.java))
+                }) {
+                    Text(text = "前往camera1预览")
+                }
             }
         }
     }

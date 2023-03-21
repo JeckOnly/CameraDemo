@@ -21,7 +21,7 @@ import com.permissionx.guolindev.PermissionX
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class CameraXActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCameraxBinding
 
@@ -36,13 +36,13 @@ class MainActivity : AppCompatActivity() {
             ) {
                 Row(modifier = Modifier.align(Alignment.Center)) {
                     Button(onClick = {
-                        startCamera(this@MainActivity, binding.cameraxPreview)
+                        startCamera(this@CameraXActivity, binding.cameraxPreview)
                     }) {
                         Text(text = "cameraX预览")
                     }
                     Spacer(modifier = Modifier.width(20.dp))
                     Button(onClick = {
-                        startActivity(Intent(this@MainActivity, Camera2Activity::class.java))
+                        startActivity(Intent(this@CameraXActivity, Camera2Activity::class.java))
                     }) {
                         Text(text = "跳转到camera2")
                     }
