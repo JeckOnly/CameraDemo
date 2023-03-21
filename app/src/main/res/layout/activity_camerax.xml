@@ -12,7 +12,7 @@
         android:layout_height="match_parent">
 
         <androidx.camera.view.PreviewView
-            android:id="@+id/main_Preview"
+            android:id="@+id/camerax_preview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +21,7 @@
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <androidx.compose.ui.platform.ComposeView
-            android:id="@+id/main_composeView"
+            android:id="@+id/camerax_composeView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
